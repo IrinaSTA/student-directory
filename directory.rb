@@ -29,14 +29,15 @@ def input_students
   # return the array of students
   students
 end
+$margin = 50
 def print_header
-  puts "The students of Villains Academy"
-  puts "---------------"
+  puts "The students of Villains Academy".center($margin)
+  puts "---------------".center($margin)
 end
 def print(students)
   students.each_with_index do |student, index|
     if student[:name].length < 12
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center($margin)
     end
   end
 end
