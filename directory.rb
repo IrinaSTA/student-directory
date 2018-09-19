@@ -1,5 +1,21 @@
 @students = []
 
+def print_header
+  margin = 50
+  puts "The students of Villains Academy".center(margin)
+  puts "---------------".center(margin)
+end
+
+def print_student_list
+  @students.each_with_index do |student, index|
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  end
+end
+
+def print_footer
+  puts "Overall, we have #{@students.count} great students"
+end
+
 def input_students
   puts "Please enter the name and cohort of each student"
   puts "To finish, just hit return twice"
@@ -33,12 +49,6 @@ def input_students
   @students
 end
 
-def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "9. Exit"
-end
-
 def show_students
   print_header
   print_student_list
@@ -51,11 +61,20 @@ def process(selection)
       @students = input_students
     when "2"
       show_students
+    when "3"
+      save_students
     when "9"
       exit #this will cause the program to terminate
     else
       puts "I don't know what you meant, try again"
   end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list to students.csv"
+  puts "9. Exit"
 end
 
 def interactive_menu
@@ -65,20 +84,14 @@ def interactive_menu
   end
 end
 
-def print_header
-  margin = 50
-  puts "The students of Villains Academy".center(margin)
-  puts "---------------".center(margin)
-end
-
-def print_student_list
-  @students.each_with_index do |student, index|
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
   end
-end
-
-def print_footer
-  puts "Overall, we have #{@students.count} great students"
+  file.close
 end
 
 interactive_menu
