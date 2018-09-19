@@ -20,7 +20,7 @@ def input_students
   puts "Please enter the name and cohort of each student"
   puts "To finish, just hit return twice"
 
-  user_input = gets.chomp.split(/[\s,]+/)
+  user_input = STDIN.gets.chomp.split(/[\s,]+/)
   name = user_input[0]
   # defaults to november if cohort is not entered
   if user_input[1] != nil
@@ -37,7 +37,7 @@ def input_students
       puts "Now we have #{@students.count} students"
     end
     # get another name from the user
-    user_input = gets.chomp.split(/[\s,]+/) #this code is duplicated!
+    user_input = STDIN.gets.chomp.split(/[\s,]+/) #this code is duplicated!
     name = user_input[0] #getting user input may be its own method?
     if user_input[1] != nil
       cohort = user_input[1].to_sym
@@ -83,7 +83,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -97,8 +97,20 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first #first argument from the command line
+  return if filename.nil? #get out of the method if it isn't given
+  if file.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count}from #{filename}"
+  else
+    puts "Sorry, #{filename} does not exist."
+    exit
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym}
